@@ -14,6 +14,7 @@ imsub = rossubscriber(imagetopic, 'sensor_msgs/CompressedImage');
 while true
     msg = receive(imsub, 3.5); % 0.5 sec timeout
     image = readImage(msg);
+    image = rgb2gray(image);
     imagesc(image);
     hold on;
 end
