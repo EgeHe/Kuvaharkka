@@ -37,14 +37,15 @@ while true
     corrected_radius = mean([corr_x, corr_y]) * radius;
     
     ball_pos = get_3d_location(depth_image, corrected_pos, corrected_radius);
+    corr_ball_pos = pixels_to_mm(ball_pos);
     
     if isequal(size(prev_pos), [0, 0])
-        prev_pos = ball_pos;
+        prev_pos = corr_ball_pos;
         continue
     end
     
-    vel = calculate_velocity(prev_pos, ball_pos, dt);
-    prev_pos = ball_pos;
+    vel = calculate_velocity(prev_pos, corr_ball_pos, dt);
+    prev_pos = corr_ball_pos;
     
     imagesc(image);
     hold on;
