@@ -48,5 +48,7 @@ while true
     
     imagesc(image);
     hold on;
+    
+    viscircles(obj_pos, radius, 'EdgeColor', 'r');
 end
 
