@@ -5,12 +5,12 @@ if nargin < 1
 elseif nargin < 2
     size = [100, 180];
 else
-    size = [prev_size - 30, prev_size + 30];
+    size = [prev_size - 40, prev_size + 40];
 end
 
 [centers, radii] = imfindcircles(im, size);
-imshow(im);
-viscircles(centers, radii,'EdgeColor','b');
+%imshow(im);
+%viscircles(centers, radii,'EdgeColor','b');
 
 pos = centers(1);
 radii = radii(1);

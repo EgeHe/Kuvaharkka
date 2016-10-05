@@ -14,9 +14,15 @@ depth_imagetopic = '/kinect2/qhd/image_depth';
 depthimsub = rossubscriber(depth_imagetopic, 'sensor_msgs/Image');
 
 %%
+radius = 120;
+prev_pos = [];
+time = rostime('now');
+
 while true
     msg = receive(imsub, 0.5); % 0.5 sec timeout
     depth_msg = receive(depthimsub, 0.5);
+    dt = msg.stamp - time;
+    time = msg.stamp;
     
     image = readImage(msg);
     depth_image = readImage(depth_msg);
@@ -25,12 +31,20 @@ while true
     corr_x = size(image, 2);
     
     bin_img = thresh_green(image);
-    [obj_pos, radius] = search_position(bin_img);
+    [obj_pos, radius] = search_position(bin_img, radius);
     
     corrected_pos = [obj_pos(1) * corr_y, obj_pos(2) * corr_x];
-    corrected_radius = avg(corr_x, corr_y) * radius;
+    corrected_radius = mean([corr_x, corr_y]) * radius;
     
     ball_pos = get_3d_location(depth_image, corrected_pos, corrected_radius);
+    
+    if isequal(size(prev_pos), [0, 0])
+        prev_pos = ball_pos;
+        continue
+    end
+    
+    vel = calculate_velocity(prev_pos, ball_pos, dt);
+    prev_pos = ball_pos;
     
     imagesc(image);
     hold on;
