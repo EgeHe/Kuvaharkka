@@ -1,9 +1,7 @@
-function ball_center = get_3d_location(depth_image, coordinates)
+function ball_center = get_3d_location(depth_image, coordinates, roi_size)
 
-% TODO: T‰h‰n parempi tapa m‰‰ritt‰‰ etsint‰alue koordinaattien ymp‰rilt‰?
 
-% Crop region of interest around coordinates
-roi_size = 30;
+% Crop ROI around coordinates
 x_start = coordinates(1)-roi_size/2;
 y_start = coordinates(2)-roi_size/2;
 roi = depth_image(y_start:y_start+roi_size, x_start:x_start+roi_size);
