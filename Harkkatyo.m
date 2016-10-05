@@ -1,28 +1,31 @@
 %% ROS initialization, run with f9
 % Edit ROS network variables to fit your network
 %{
-setenv('ROS_MASTER_URI','http://192.168.2.90:11311')
-setenv('ROS_HOSTNAME','192.168.2.90')
+setenv('ROS_MASTER_URI','http://127.0.0.1:11311')
+setenv('ROS_HOSTNAME','127.0.0.1')
 rosinit
 %}
 
 %%
-imagetopic = '/kinect2/qhd/image_color/compressed';
-imsub = rossubscriber(imagetopic, 'sensor_msgs/CompressedImage');
+imagetopic = '/kinect2/qhd/image_color';
+imsub = rossubscriber(imagetopic, 'sensor_msgs/Image');
 
-depth_imagetopic = '/kinect2/qhd/image_depth';
+depth_imagetopic = '/kinect2/sd/image_depth';
 depthimsub = rossubscriber(depth_imagetopic, 'sensor_msgs/Image');
 
 %%
 radius = 120;
 prev_pos = [];
 time = rostime('now');
+time = seconds(double(time.Sec) + double(time.Nsec)/10^9);
 
 while true
     msg = receive(imsub, 0.5); % 0.5 sec timeout
     depth_msg = receive(depthimsub, 0.5);
-    dt = msg.stamp - time;
-    time = msg.stamp;
+    
+    msg_time = seconds(double(msg.Header.Stamp.Sec) + double(msg.Header.Stamp.Nsec)/10^9);
+    dt = msg_time - time;
+    time = msg_time;
     
     image = readImage(msg);
     depth_image = readImage(depth_msg);
