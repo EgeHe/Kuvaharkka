@@ -22,7 +22,9 @@ while true
     depth_image = readImage(depth_msg);
     
     bin_img = thresh_green(image);
-    obj_pos = search_position(bin_img, depth_image);
+    [obj_pos, radius] = search_position(bin_img);
+    
+    ball_pos = get_3d_location(depth_image, obj_pos);
     
     imagesc(image);
     hold on;
