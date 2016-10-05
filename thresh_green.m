@@ -14,4 +14,4 @@ bw_green = im2bw(green_only, 0.10);
 %Fill holes
 bw_clean = imfill(bw_green, 'holes');
 %Remove too small objects (some better way for this?)
-binary_image = bwareaopen(bw_clean, 2000);
+binary_image = bwareaopen(bw_clean, 20);
