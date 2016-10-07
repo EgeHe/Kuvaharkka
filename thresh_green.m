@@ -8,10 +8,12 @@ blue = image(:,:,3);
 green_only = green - blue/2 - red/2;
 
 %Turn to binary image
-bw_green = im2bw(green_only, 0.10);
+bw_green = im2bw(green_only, 0.13);
 
 %Clean binary image
 %Fill holes
 bw_clean = imfill(bw_green, 'holes');
 %Remove too small objects (some better way for this?)
-binary_image = bwareaopen(bw_clean, 20);
+binary_image = bwareaopen(bw_clean, 40);
+
+
